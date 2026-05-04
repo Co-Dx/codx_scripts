@@ -3,7 +3,7 @@
 # 2026-03-12
 #
 # SYNOPSIS
-#   ./scripts/versioner.sh [ -p <source> | -b <source> | -d | -m <major> <minor> ] [-h]
+#   ./versioner2.sh [ -p <source> | -b <source> | -d | -m <major> <minor> ] [-h]
 #
 # DESCRIPTION
 #   This script will select the version number to use for a particular commit. If
@@ -19,17 +19,22 @@
 #   -b, --build    : Set version for plzBuild tag.
 #   -d, --deploy   : Set version for deploy tag (must be on a commit with a valid semver tag already).
 #   -m, --main     : Set version for main branch commit.
-#       --pipeline : (Optional) If set, outputs the version in a format compatible with Azure DevOps pipeline variables and logs.
+#       --pipeline : (Optional) If set, outputs the version in a format compatible with 
+#                    Azure DevOps pipeline variables and logs.
 #
 # EXAMPLE
-#   ./scripts/versioner.sh -M "1" -m "0" -s "refs/heads/main"
-#       Set the version to 1.0.<patch>
+#   ./versioner2.sh -p refs/pull/123
+#       Set version for a PR build with source branch refs/pull/123.
 #
-#   ./scripts/versioner.sh -s "refs/pull/123"
-#       Set the version to pr123_YYYYMMDD_hhmmss for a PR.
+#   ./versioner2.sh -b refs/tags/plzBuild2-dev-1.2.3
+#       Set version for a plzBuild tag with version 1.2.3.
 #
-#   ./scripts/versioner.sh -s "refs/tags/plzBuild-usfaz0-c001"
-#       Set the version to c001.
+#   ./versioner2.sh -d
+#       Set version for a deploy tag. The current commit must have a valid semver tag.
+#
+#   ./versioner2.sh -m 1 2
+#       Set version for a main branch commit with major version 1 and minor version 2. 
+#       Patch version will be auto-incremented.
 ######################################################################################
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; BLUE='\033[0;34m'; MAGENTA='\033[0;35m'; CYAN='\033[0;36m'; ORANGE='\033[0;33m'; WHITE='\033[0;37m'; NC='\033[0m'
@@ -139,7 +144,8 @@ else
 
 fi
 
-printf "\n$SUCCESS Version set to ${YELLOW}$version${NC}.\n\n"
+printf "\n$INFO Version set to ${YELLOW}$version${NC}.\n\n"
 if [[ $pipeline -eq 1 ]]; then
+    printf "$INFO Setting pipeline variable 'version' to '$version'.\n"
     echo "##vso[task.setvariable variable=version;isOutput=true]$version"
 fi
