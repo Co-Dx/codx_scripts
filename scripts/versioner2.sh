@@ -90,7 +90,7 @@ if [[ $verType -eq 1 ]]; then
         printf "$CRITICAL Invalid or missing source for PR versioning. Expected format: refs/pull/<number>.\n"
         exit 1
     fi
-    version="pr$(echo "$source" | cut -d '/' -f3)_$(date +%Y%m%d_%H%M%S)"
+    version="pr$(echo "$source" | cut -d '/' -f3)_$(date +%Y%m%dT%H%M%S)"
 
 elif [[ $verType -eq 2 ]]; then
     printf "Setting version for build tag source: ${CYAN}$source${NC}\n"
@@ -121,7 +121,7 @@ elif [[ $verType -eq 3 ]]; then
     fi
 
 elif [[ $verType -eq 4 ]]; then
-    printf "Setting version for main branch with major=${CYAN}$major${NC} and minor=${CYAN}$minor${NC}\n"
+    printf "Setting version for main branch with ${CYAN}major=$major${NC} and ${CYAN}minor=$minor${NC}\n"
     if [[ -z $major || -z $minor ]]; then
         printf "$CRITICAL Major and minor version must be specified for main branch versioning. Exiting.\n"
         exit 1
