@@ -9,7 +9,6 @@
 #
 #   -d, --deploy     : deploy the project to the specified environments.
 #   -c, --custom     : create a custom build of the project with the specified version and deploy to the specified environments.
-#   -h, --help       : display this help message.
 #
 # EXAMPLE
 #   ./deploy2.sh -c my_custom_version apk
@@ -84,12 +83,6 @@ while [[ $# -gt 0 ]]; do
                 envs+=("$1")
                 shift
             done
-            ;;
-        -h|--help)
-            echo " "
-            awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
-            echo " "
-            exit 0
             ;;
         *)
             printf "$CRITICAL Unknown argument: $1\n"

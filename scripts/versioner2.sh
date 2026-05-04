@@ -20,7 +20,6 @@
 #   -d, --deploy   : Set version for deploy tag (must be on a commit with a valid semver tag already).
 #   -m, --main     : Set version for main branch commit.
 #       --pipeline : (Optional) If set, outputs the version in a format compatible with Azure DevOps pipeline variables and logs.
-#   -h, --help     : display this help message.
 #
 # EXAMPLE
 #   ./scripts/versioner.sh -M "1" -m "0" -s "refs/heads/main"
@@ -72,12 +71,6 @@ while [[ "$#" -gt 0 ]]; do
             pipeline=1
             WARNING="##vso[task.logissue type=warning]"
             CRITICAL="##vso[task.logissue type=error]"
-            ;;
-        -h|--help) 
-            printf "\n"
-            awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
-            printf "\n"
-            exit 0
             ;;
         *) 
             printf "$CRITICAL Unknown parameter passed: $1\n"
