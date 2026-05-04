@@ -15,7 +15,6 @@
 #   -r, --repository : the repository for which the SBOM is being generated (e.g. pcr_dart_server, pcr_analysis, pcr_internal_website, hasura_engine)
 #   -v, --version    : the version of the image for which the SBOM is being generated (e.g. 1.0.0)
 #   -p, --path       : the path to the apk or aab file for which the SBOM is being generated
-#   -h, --help       : display this help message.
 #
 # EXAMPLE
 ######################################################################################
@@ -126,12 +125,6 @@ while [[ "$#" -gt 0 ]]; do
         --path|-p)
             path="$2"
             shift
-            ;;
-        --help|-h)
-            printf "\n"
-            awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
-            printf "\n"
-            exit 0
             ;;
         *)
             printf "$CRITICAL Unknown parameter passed: $1\n"
