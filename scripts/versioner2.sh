@@ -121,7 +121,7 @@ elif [[ $verType -eq 3 ]]; then
     fi
 
 elif [[ $verType -eq 4 ]]; then
-    printf "Setting version for main branch with major=${CYAN}$major${NC} and minor=${CYAN}$minor${NC}\n"
+    printf "Setting version for main branch with ${CYAN}major=$major${NC} and ${CYAN}minor=$minor${NC}\n"
     if [[ -z $major || -z $minor ]]; then
         printf "$CRITICAL Major and minor version must be specified for main branch versioning. Exiting.\n"
         exit 1
