@@ -58,8 +58,7 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         -d|--deploy)
             verType=3
-            source="$2"
-            shift 2
+            shift
             ;;
         -m|--main)
             verType=4
