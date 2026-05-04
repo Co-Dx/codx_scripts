@@ -89,8 +89,8 @@ done
 printf "========================================================================\n"
 if [[ $verType -eq 1 ]]; then
     printf "Setting version for PR source: ${CYAN}$source${NC}\n"
-    if [[ -z $source || ! $source =~ ^refs/pull/[0-9]+$ ]]; then
-        printf "$CRITICAL Invalid or missing source for PR versioning. Expected format: refs/pull/<number>.\n"
+    if [[ -z $source || ! $source =~ ^refs/pull/[0-9]+/.*$ ]]; then
+        printf "$CRITICAL Invalid or missing source for PR versioning. Expected format: refs/pull/<number>/...\n"
         exit 1
     fi
     version="pr$(echo "$source" | cut -d '/' -f3)_$(date +%Y%m%dT%H%M%S)"
