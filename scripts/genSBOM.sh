@@ -12,7 +12,8 @@
 #   used to determine the environment and repository being deployed, as well as the image 
 #   being used.
 #
-#   -r, --repository : the repository for which the SBOM is being generated (e.g. pcr_dart_server, pcr_analysis, pcr_internal_website, hasura_engine)
+#   -r, --repository : the repository for which the SBOM is being generated (e.g. 
+#                      pcr_dart_server, pcr_analysis, pcr_internal_website, hasura_engine)
 #   -v, --version    : the version of the image for which the SBOM is being generated (e.g. 1.0.0)
 #   -p, --path       : the path to the apk or aab file for which the SBOM is being generated
 #
@@ -35,7 +36,7 @@ function generateSBOM_container() {
     local version="$1"
     local path="$2"
 
-    if [[ "$path" == "NONE" ]]; then
+    if [[ "$path" == "." ]]; then
         printf "$CRITICAL No path specified. Exiting.\n"
         exit 1
     fi
@@ -49,7 +50,7 @@ function generateSBOM_apk() {
     local version="$1"
     local path="$2"
 
-    if [[ "$path" == "NONE" ]]; then
+    if [[ "$path" == "." ]]; then
         printf "$CRITICAL No path to apk specified. Exiting.\n"
         exit 1
     fi
@@ -67,7 +68,7 @@ function generateSBOM_aab() {
     local version="$1"
     local path="$2"
 
-    if [[ "$path" == "NONE" ]]; then
+    if [[ "$path" == "." ]]; then
         printf "$CRITICAL No path to aab specified. Exiting.\n"
         exit 1
     fi

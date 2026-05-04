@@ -90,7 +90,7 @@ if [[ $verType -eq 1 ]]; then
         printf "$CRITICAL Invalid or missing source for PR versioning. Expected format: refs/pull/<number>.\n"
         exit 1
     fi
-    version="pr$(echo "$source" | cut -d '/' -f3)_$(date +%Y%m%d_%H%M%S)"
+    version="pr$(echo "$source" | cut -d '/' -f3)_$(date +%Y%m%dT%H%M%S)"
 
 elif [[ $verType -eq 2 ]]; then
     printf "Setting version for build tag source: ${CYAN}$source${NC}\n"
