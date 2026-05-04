@@ -12,7 +12,7 @@
 #   list             : list all available scripts in the remote repo.
 #   version          : show the repo version.
 #   update           : re-run the installer to refresh the alias.
-#   -h, --help       : display this help message.
+#   help             : display this help message.
 #
 # EXAMPLE
 #   codx deploy2 -c c110 apk
@@ -58,7 +58,9 @@ SCRIPT="$1"; shift
 
 case "$SCRIPT" in
     help|--help|-h)
-        awk '/^#{80,}/{flag=!flag; next} flag' "$0" | sed 's/#//g'
+        echo " "
+        awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
+        echo " "
         exit 0
         ;;
     version|--version|-v)
