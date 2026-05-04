@@ -1,0 +1,13 @@
+# CODEOWNERS
+# All changes to any file in this repo require review by the listed owner(s).
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+*                   @Corbinium
+
+# Dispatcher and installer are especially sensitive — require explicit approval
+/codx.sh            @Corbinium
+/install.sh         @Corbinium
+
+# All scripts
+/scripts/           @Corbinium
