@@ -54,22 +54,21 @@ while [[ "$#" -gt 0 ]]; do
         -p|--pr) 
             verType=1
             source="$2"
-            shift 2
+            shift
             ;;
         -b|--build)
             verType=2
             source="$2"
-            shift 2
+            shift
             ;;
         -d|--deploy)
             verType=3
-            shift
             ;;
         -m|--main)
             verType=4
             major="$2"
             minor="$3"
-            shift 3
+            shift 2
             ;;
         --pipeline) 
             pipeline=1
