@@ -27,7 +27,7 @@ The repo is **public** so `curl` over raw HTTPS works without tokens. Write acce
 Paste this into a terminal — works on **macOS, Linux, Git Bash, and WSL**:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/your-org/codx-scripts/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Co-Dx/codx_scripts/main/install.sh)
 ```
 
 Then activate the alias in the current shell:
