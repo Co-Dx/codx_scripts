@@ -50,8 +50,10 @@ function generateSBOM_apk() {
         printf "$CRITICAL No path to apk specified. Exiting.\n"
         exit 1
     fi
-    if ls "$path"/*.apk > /dev/null 2>&1; then
-        cdxgen -p -o SBOM/SBOM_apk.json -t apk ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$(ls "$path"/*.apk | head -n 1)"
+    local apk_file
+    apk_file=$(find "$path" -maxdepth 1 -name "*.apk" | head -n 1)
+    if [[ -n "$apk_file" ]]; then
+        cdxgen -p -o SBOM/SBOM_apk.json -t apk ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$apk_file"
     else
         printf "$INFO No apk artifacts found at '$path', skipping SBOM generation for apk.\n"
     fi
@@ -65,8 +67,10 @@ function generateSBOM_aab() {
         printf "$CRITICAL No path to aab specified. Exiting.\n"
         exit 1
     fi
-    if ls "$path"/*.aab > /dev/null 2>&1; then
-        cdxgen -p -o SBOM/SBOM_aab.json -t aab ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$(ls "$path"/*.aab | head -n 1)"
+    local aab_file
+    aab_file=$(find "$path" -maxdepth 1 -name "*.aab" | head -n 1)
+    if [[ -n "$aab_file" ]]; then
+        cdxgen -p -o SBOM/SBOM_aab.json -t aab ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$aab_file"
     else
         printf "$INFO No aab artifacts found at '$path', skipping SBOM generation for aab.\n"
     fi
