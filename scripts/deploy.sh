@@ -1,5 +1,5 @@
 ######################################################################################
-# Deploy 2 
+# Deploy
 #
 # SYNOPSIS
 #   ./deploy2.sh -d [android|ios] | -c <version> [apk|aab|ios] | -h
