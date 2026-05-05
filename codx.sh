@@ -61,9 +61,7 @@ SCRIPT="$1"; shift
 
 case "$SCRIPT" in
     help|--help|-h)
-        echo " "
-        awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
-        echo " "
+        curl -fsSL "${BASE_URL}/codx.sh" | awk '/^#{80,}/{flag=!flag; next} flag' | sed 's/#//g'
         exit 0
         ;;
     version|--version|-v)
