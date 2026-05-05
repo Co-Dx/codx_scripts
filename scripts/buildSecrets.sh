@@ -18,7 +18,6 @@
 #                  use the lib/secrets/secrets.yaml file by default.
 #   -o, --output : Specify the output directory. If not specified, it will use the 
 #                  directory in which the secrets.yaml file is located.
-#   -h, --help   : Display this help message.
 #
 # EXAMPLE
 #   ./buildSecrets.sh -f bin/secrets/secrets.yaml -o bin/secrets
@@ -44,12 +43,6 @@ while [[ $# -gt 0 ]]; do
         -o|--output)
             outDir="$2"
             shift 2
-            ;;
-        -h|--help)
-            echo " "
-            awk '/^#{80,}/{flag=!flag; next} flag' $0 | sed 's/#//g'
-            echo " "
-            exit 0
             ;;
         *)
             printf "$CRITICAL Unknown option: $1\n"
