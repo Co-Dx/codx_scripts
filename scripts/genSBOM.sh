@@ -42,40 +42,6 @@ function generateSBOM_container() {
     cdxgen -p -o SBOM/SBOM_container.json -t docker ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$path:$version"
 }
 
-function generateSBOM_apk() {
-    local path="$1"
-    printf "\n======================================================================================\n"
-    printf "Generating SBOM for apk...\n"
-    if [[ "$path" == "NONE" ]]; then
-        printf "$CRITICAL No path to apk specified. Exiting.\n"
-        exit 1
-    fi
-    local apk_file
-    apk_file=$(find "$path" -maxdepth 1 -name "*.apk" | head -n 1)
-    if [[ -n "$apk_file" ]]; then
-        cdxgen -p -o SBOM/SBOM_apk.json -t apk ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$apk_file"
-    else
-        printf "$INFO No apk artifacts found at '$path', skipping SBOM generation for apk.\n"
-    fi
-}
-
-function generateSBOM_aab() {
-    local path="$1"
-    printf "\n======================================================================================\n"
-    printf "Generating SBOM for aab...\n"
-    if [[ "$path" == "NONE" ]]; then
-        printf "$CRITICAL No path to aab specified. Exiting.\n"
-        exit 1
-    fi
-    local aab_file
-    aab_file=$(find "$path" -maxdepth 1 -name "*.aab" | head -n 1)
-    if [[ -n "$aab_file" ]]; then
-        cdxgen -p -o SBOM/SBOM_aab.json -t aab ${cdxgen_flags[@]+"${cdxgen_flags[@]}"} "$aab_file"
-    else
-        printf "$INFO No aab artifacts found at '$path', skipping SBOM generation for aab.\n"
-    fi
-}
-
 function generateSBOM_python() {
     printf "\n======================================================================================\n"
     printf "Generating SBOM for python...\n"
@@ -162,8 +128,9 @@ elif [[ "$repository" == "pcr_internal_website" ]]; then
 
 elif [[ "$repository" == "pcr_tech_app" ]]; then
     generateSBOM_flutter
-    generateSBOM_apk "$path"
-    generateSBOM_aab "$path"
+
+elif [[ "$repository" == "pcr_patient_app" ]]; then
+    generateSBOM_flutter
 
 else
     printf "$WARNING Not implemented yet for $repository.\n"
