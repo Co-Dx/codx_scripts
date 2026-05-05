@@ -89,7 +89,7 @@ done
 printf "========================================================================\n"
 if [[ $verType -eq 1 ]]; then
     printf "Setting version for PR source: ${CYAN}$source${NC}\n"
-    if [[ -z $source || ! $source =~ ^refs/pull/[0-9]+/.*$ ]]; then
+    if [[ -z $source ]] || ! echo "$source" | grep -Eq "^refs/pull/[0-9]+/.*$" > /dev/null; then
         printf "$CRITICAL Invalid or missing source for PR versioning. Expected format: refs/pull/<number>/...\n"
         exit 1
     fi
@@ -97,7 +97,7 @@ if [[ $verType -eq 1 ]]; then
 
 elif [[ $verType -eq 2 ]]; then
     printf "Setting version for build tag source: ${CYAN}$source${NC}\n"
-    if [[ -z $source || ! $source =~ ^refs/tags/plzBuild2- ]]; then
+    if [[ -z $source ]] || ! echo "$source" | grep -Eq "^refs/tags/plzBuild2-" > /dev/null; then
         printf "$CRITICAL Invalid or missing source for build tag versioning. Expected format: refs/tags/plzBuild2-<env1_env2>-<version>.\n"
         exit 1
     fi
@@ -105,14 +105,14 @@ elif [[ $verType -eq 2 ]]; then
     if [[ $version == "" ]]; then
         printf "$CRITICAL Invalid custom release tag format. Expected plzBuild2-<env1_env2>-<version>.\n"
         exit 1
-    elif [[ $version =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    elif echo "$version" | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+" > /dev/null; then
         printf "$CRITICAL Custom release version '$version' matches standard versioning format. This is not allowed.\n"
         exit 1
     fi
 
 elif [[ $verType -eq 3 ]]; then
     printf "Setting version for deploy tag.\n"
-    if [[ $(git tag --points-at $(git rev-parse HEAD)) =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    if git tag --points-at $(git rev-parse HEAD) | grep -Eq "^[0-9]+\.[0-9]+\.[0-9]+$" > /dev/null; then
         printf "$INFO Git tag found, setting version from tag.\n"
         majorC=$(git tag --points-at $(git rev-parse HEAD) | grep -Ex "^[0-9]+\.[0-9]+\.[0-9]+$" | cut -d '.' -f1 | sort -n | tail -1)
         minorC=$(git tag --points-at $(git rev-parse HEAD) | grep -Ex "^$majorC\.[0-9]+\.[0-9]+$" | cut -d '.' -f2 | sort -n | tail -1)
