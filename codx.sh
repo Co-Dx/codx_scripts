@@ -42,6 +42,7 @@ BASE_URL="https://raw.githubusercontent.com/${CODX_ORG}/${CODX_REPO}/${CODX_BRAN
 # Allowlist of scripts developers can run via codx.
 # Add or remove entries here to control access.
 ALLOWED_SCRIPTS=(
+    "buildSecrets2"
     "deploy2"
     "genSBOM"
     "versioner2"
