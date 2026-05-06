@@ -2,22 +2,18 @@
 # Deploy
 #
 # SYNOPSIS
-#   ./deploy.sh -d <env1> <env2> ...
-#   ./deploy.sh -c <version> <env1> <env2> ...
+#   ./deployApp.sh -b <version> -t <type1> <type2> ... -f <flavor1> <flavor2> ...
+#   ./deployApp.sh -d <os1> <os2> ... -f <flavor1> <flavor2> ...
 #
 # DESCRIPTION
 #   This script is used to deploy the project through the pipeline.
 #
-#   -d, --deploy     : deploy the project to the specified environments.
-#   -c, --custom     : create a custom build of the project with the specified version and deploy to the specified environments.
+#     -b, --build  : specify a custom version to build.
+#     -t, --type   : specify the type of build for custom versions (apk, aab, ipa).
+#     -f, --flavor : specify the flavor of the build.
+#     -d, --deploy : deploy the project to the specified OS (android, ios).
 #
 # EXAMPLE
-#   ./deploy.sh -c my_custom_version usphi0 usphi1
-#       Create a custom build of the project with the version "my_custom_version" and 
-#       deploy to the usphi0 and usphi1 environments.
-#
-#   ./deploy.sh -d usphi0 usphi1
-#       Deploy the project to the usphi0 and usphi1 environments.
 ######################################################################################
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; BLUE='\033[0;34m'; MAGENTA='\033[0;35m'; CYAN='\033[0;36m'; ORANGE='\033[0;33m'; WHITE='\033[0;37m'; NC='\033[0m'
@@ -35,7 +31,7 @@ tag_in_git() {
     printf "\n$SUCCESS Tag ${YELLOW}$tag_name${NC} created and pushed to remote.\n\n"
 }
 
-combine_envs() {
+combine_array() {
     local env_array=("$@")
     local combined=""
     for env in "${env_array[@]}"; do
@@ -63,26 +59,37 @@ ask_confirmation() {
 # Arguments
 # ====================================================================================
 
-envs=()
-tag=""
+oss=()
+flavors=()
+types=()
 version=""
+tag="plzDeploy2"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
-        -d|--deploy)
-            tag="plzDeploy2"
-            shift
-            while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
-                envs+=("$1")
-                shift
-            done
-            ;;
-        -c|--custom)
+        -b|--build)
             tag="plzBuild2"
             version="$2"
             shift 2
+            ;;
+        -t|--type)
+            shift
             while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
-                envs+=("$1")
+                types+=("$1")
+                shift
+            done
+            ;;
+        -f|--flavor)
+            shift
+            while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
+                flavors+=("$1")
+                shift
+            done
+            ;;
+        -d|--deploy)
+            shift
+            while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
+                oss+=("$1")
                 shift
             done
             ;;
@@ -93,15 +100,21 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-if [[ -z $tag ]]; then
-    printf "$CRITICAL No deployment type specified. Use -h for options.\n"
-    exit 1
+
+if [[ ${#flavors[@]} -eq 0 ]]; then
+    printf "$WARNING No flavors specified for deployment. A default flavor will be used.\n"
+    flavors=("default")
 fi
-if [[ ${#envs[@]} -eq 0 ]]; then
-    printf "$CRITICAL No environments specified for deployment or no build types specified for custom build. Use -h for options.\n"
-    exit 1
-fi
-if [[ $tag == "plzBuild2" ]]; then
+if [[ $tag == "plzDeploy2" ]]; then
+    if [[ ${#oss[@]} -eq 0 ]]; then
+        printf "$CRITICAL No OS specified for deployment. Use -h for options.\n"
+        exit 1
+    fi
+else
+    if [[ ${#types[@]} -eq 0 ]]; then
+        printf "$CRITICAL No build types specified for custom build. Use -h for options.\n"
+        exit 1
+    fi
     if [[ -z $version ]]; then
         printf "$CRITICAL No version specified for build. Use -h for options.\n"
         exit 1
@@ -117,17 +130,22 @@ fi
 # ====================================================================================
 git fetch -pPf
 
-combined_envs=$(combine_envs "${envs[@]}")
+combined_flavors=$(combine_array "${flavors[@]}")
 if [[ $tag == "plzDeploy2" ]]; then
-    tag="$tag-${combined_envs}"
+    combined_oss=$(combine_array "${oss[@]}")
+    tag="$tag-${combined_flavors}-${combined_oss}"
+
 elif [[ $tag == "plzBuild2" ]]; then
-    tag="$tag-${combined_envs}-${version}"
     if [[ $(git tag -l "$version") ]]; then
         printf "$WARNING Version $version already exists. Your deployment will likely fail silently.\n"
         if ! ask_confirmation "          Continue?"; then
             exit 0
         fi
     fi
+
+    combined_types=$(combine_array "${types[@]}")
+    tag="$tag-${combined_flavors}-${version}-${combined_types}"
+
 fi
 
 tag_in_git "$tag"
