@@ -44,6 +44,7 @@ BASE_URL="https://raw.githubusercontent.com/${CODX_ORG}/${CODX_REPO}/${CODX_BRAN
 ALLOWED_SCRIPTS=(
     "buildSecrets"
     "deploy"
+    "deployApp"
     "genSBOM"
     "versioner"
 )
