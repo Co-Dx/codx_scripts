@@ -59,8 +59,6 @@ ask_confirmation() {
 # Arguments
 # ====================================================================================
 
-oss=()
-flavors=()
 types=()
 version=""
 tag="plzDeploy2"
@@ -82,14 +80,14 @@ while [[ $# -gt 0 ]]; do
         -f|--flavor)
             shift
             while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
-                flavors+=("$1")
+                types+=("$1")
                 shift
             done
             ;;
         -d|--deploy)
             shift
             while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
-                oss+=("$1")
+                types+=("$1")
                 shift
             done
             ;;
@@ -101,20 +99,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-if [[ ${#flavors[@]} -eq 0 ]]; then
-    printf "$WARNING No flavors specified for deployment. A default flavor will be used.\n"
-    flavors=("default")
+if [[ ${#types[@]} -eq 0 ]]; then
+    printf "$CRITICAL No build types specified for custom build or no environments specified for deployment. Use -h for options.\n"
+    exit 1
 fi
-if [[ $tag == "plzDeploy2" ]]; then
-    if [[ ${#oss[@]} -eq 0 ]]; then
-        printf "$CRITICAL No OS specified for deployment. Use -h for options.\n"
-        exit 1
-    fi
-else
-    if [[ ${#types[@]} -eq 0 ]]; then
-        printf "$CRITICAL No build types specified for custom build. Use -h for options.\n"
-        exit 1
-    fi
+if [[ $tag == "plzBuild2" ]]; then
     if [[ -z $version ]]; then
         printf "$CRITICAL No version specified for build. Use -h for options.\n"
         exit 1
@@ -130,10 +119,9 @@ fi
 # ====================================================================================
 git fetch -pPf
 
-combined_flavors=$(combine_array "${flavors[@]}")
+combined_types=$(combine_array "${types[@]}")
 if [[ $tag == "plzDeploy2" ]]; then
-    combined_oss=$(combine_array "${oss[@]}")
-    tag="$tag-${combined_flavors}-${combined_oss}"
+    tag="$tag-${combined_types}"
 
 elif [[ $tag == "plzBuild2" ]]; then
     if [[ $(git tag -l "$version") ]]; then
@@ -142,9 +130,7 @@ elif [[ $tag == "plzBuild2" ]]; then
             exit 0
         fi
     fi
-
-    combined_types=$(combine_array "${types[@]}")
-    tag="$tag-${combined_flavors}-${version}-${combined_types}"
+    tag="$tag-${combined_types}-${version}"
 
 fi
 
