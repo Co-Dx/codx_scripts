@@ -122,3 +122,10 @@ printf "CLEAN PYTHON PACKAGES\n"
 rm -rvf /tmp/*/storage_preview-1.0.0b1-py2.py3-none-any.whl || true
 
 printf "\n$INFO Python packages cleaned.\n"
+
+#####################################################################################
+# Remove all files and directories in the tools directory.
+printf "========================================================================\n"
+printf "CLEAN TOOLS DIRECTORY\n"
+
+find ~/myagent/tools -mindepth 1 -print -delete
