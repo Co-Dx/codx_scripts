@@ -45,7 +45,6 @@ ALLOWED_SCRIPTS=(
     "buildSecrets"
     "deploy"
     "deployApp"
-    "genSBOM"
     "versioner"
 )
 
