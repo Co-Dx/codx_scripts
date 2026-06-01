@@ -40,6 +40,8 @@
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; BLUE='\033[0;34m'; MAGENTA='\033[0;35m'; CYAN='\033[0;36m'; ORANGE='\033[0;33m'; WHITE='\033[0;37m'; NC='\033[0m'
 CRITICAL="$RED[CRITICAL]$NC"; WARNING="$YELLOW[WARNING]$NC"; INFO="$BLUE[INFO]$NC"; COMPLETE="$GREEN[COMPLETE]$NC"; SUCCESS="$GREEN[SUCCESS]$NC"; FAIL="$RED[FAIL]$NC"
 
+SEMVER_REGEX="[0-9]+\.[0-9]+\.[0-9]+"
+
 # ====================================================================================
 # Arguments
 # ====================================================================================
@@ -105,14 +107,14 @@ elif [[ $verType -eq 2 ]]; then
     if [[ $version == "" ]]; then
         printf "$CRITICAL Invalid custom release tag format. Expected plzBuild2-<env1_env2>-<version>.\n"
         exit 1
-    elif echo "$version" | grep -Eq "[0-9]+\.[0-9]+\.[0-9]+" > /dev/null; then
+    elif echo "$version" | grep -Eq "$SEMVER_REGEX" > /dev/null; then
         printf "$CRITICAL Custom release version '$version' matches standard versioning format. This is not allowed.\n"
         exit 1
     fi
 
 elif [[ $verType -eq 3 ]]; then
     printf "Setting version for deploy tag.\n"
-    if git tag --points-at $(git rev-parse HEAD) | grep -Eq "^[0-9]+\.[0-9]+\.[0-9]+$" > /dev/null; then
+    if git tag --points-at $(git rev-parse HEAD) | grep -Eq "^$SEMVER_REGEX$" > /dev/null; then
         printf "$INFO Git tag found, setting version from tag.\n"
         majorC=$(git tag --points-at $(git rev-parse HEAD) | grep -Ex "^[0-9]+\.[0-9]+\.[0-9]+$" | cut -d '.' -f1 | sort -n | tail -1)
         minorC=$(git tag --points-at $(git rev-parse HEAD) | grep -Ex "^$majorC\.[0-9]+\.[0-9]+$" | cut -d '.' -f2 | sort -n | tail -1)
@@ -130,7 +132,7 @@ elif [[ $verType -eq 4 ]]; then
         exit 1
     fi
     if [[ $(git tag --list "$major.$minor.*") ]]; then
-        patch=$(git tag --list "$major.$minor.*" | cut -d '.' -f3 | sort -n | tail -1)
+        patch=$(git tag --list "$major.$minor.*" | grep -E "^$major\.$minor\.[0-9]+$" | cut -d '.' -f3 | sort -n | tail -1)
         patch=$((patch + 1))
     else
         patch=0
