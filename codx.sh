@@ -17,11 +17,11 @@
 #   <script> -h|--help : fetch the specified script and display its help message (header block).
 #
 # EXAMPLE
-#   codx deploy2 -c c110 apk
-#       Fetch and run the deploy2 script with a custom config.
+#   codx plzBuild -c c110 apk
+#       Fetch and run the plzBuild script with a custom config.
 #
-#   codx deploy2 -h
-#       Fetch the deploy2 script and display its help message.
+#   codx plzBuild -h
+#       Fetch the plzBuild script and display its help message.
 ######################################################################################
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; BLUE='\033[0;34m'; MAGENTA='\033[0;35m'; CYAN='\033[0;36m'; ORANGE='\033[0;33m'; WHITE='\033[0;37m'; NC='\033[0m'
@@ -43,7 +43,7 @@ BASE_URL="https://raw.githubusercontent.com/${CODX_ORG}/${CODX_REPO}/${CODX_BRAN
 # Add or remove entries here to control access.
 ALLOWED_SCRIPTS=(
     "buildSecrets"
-    "deploy"
+    "plzBuild"
     "deployApp"
     "versioner"
 )
