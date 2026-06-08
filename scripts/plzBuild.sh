@@ -2,21 +2,21 @@
 # Deploy
 #
 # SYNOPSIS
-#   ./deploy.sh -d <env1> <env2> ...
-#   ./deploy.sh -c <version> <env1> <env2> ...
+#   ./plzBuild.sh -d <env1> <env2> ...
+#   ./plzBuild.sh -c <version> <env1> <env2> ...
 #
 # DESCRIPTION
-#   This script is used to deploy the project through the pipeline.
+#   This script is used to build and deploy the project through the pipeline.
 #
 #   -d, --deploy     : deploy the project to the specified environments.
 #   -c, --custom     : create a custom build of the project with the specified version and deploy to the specified environments.
 #
 # EXAMPLE
-#   ./deploy.sh -c my_custom_version usphi0 usphi1
+#   ./plzBuild.sh -c my_custom_version usphi0 usphi1
 #       Create a custom build of the project with the version "my_custom_version" and 
 #       deploy to the usphi0 and usphi1 environments.
 #
-#   ./deploy.sh -d usphi0 usphi1
+#   ./plzBuild.sh -d usphi0 usphi1
 #       Deploy the project to the usphi0 and usphi1 environments.
 ######################################################################################
 
