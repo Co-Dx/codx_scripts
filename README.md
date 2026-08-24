@@ -54,14 +54,17 @@ source ~/.bash_profile # bash (macOS login shell)
 codx <script-name> [args...]
 ```
 
-### Built-in commands
+To get a list of available scripts:
 
-| Command | Description |
-|---|---|
-| `codx list` | List all available scripts |
-| `codx version` | Show the repo's current version |
-| `codx update` | Re-run the installer to refresh the alias |
-| `codx help` | Show usage |
+```bash
+codx list
+```
+
+All scripts have the `--help`/`-h` option for usage information.
+
+```bash
+codx plzBuild --help
+```
 
 ## Adding a new script
 
