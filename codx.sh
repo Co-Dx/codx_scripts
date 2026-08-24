@@ -45,7 +45,6 @@ ALLOWED_SCRIPTS=(
     "buildSecrets"
     "plzBuild"
     "deployApp"
-    "versioner"
 )
 
 # ====================================================================================
