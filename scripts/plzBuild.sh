@@ -98,8 +98,8 @@ if [[ -z $tag ]]; then
     exit 1
 fi
 if [[ ${#envs[@]} -eq 0 ]]; then
-    printf "$CRITICAL No environments specified for deployment or no build types specified for custom build. Use -h for options.\n"
-    exit 1
+    printf "$INFO No environments specified, will use 'none'.\n"
+    envs=("none")
 fi
 if [[ $tag == "plzBuild2" ]]; then
     if [[ -z $version ]]; then
